@@ -18,37 +18,26 @@
  * @return {boolean}
  */
 var isSymmetric = function (root) {
-  let queen = [];
-  let tempQueen = [];
-  let before, end;
-  if (root) {
-    queen.push(root.left, root.right);
+  if(!root){
+    return true;
   }
-  let loopTimes = queen.length;
-  while (queen.length) {
-    loopTimes = queen.length;
-    for (let i = 0; i < loopTimes / 2; i++) {
-      before = queen.shift();
-      after = queen.pop();
-      // 值比较
-      if (before && after && before.val !== after.val) {
+  function checkVal(tree1, tree2) {
+    if (tree1 === tree2) {
+      return true;
+    } else if (tree1 && tree2 && tree1.val === tree2.val) {
+      if (
+        checkVal(tree1.left, tree2.right) &&
+        checkVal(tree1.right, tree2.left)
+      ){
+        return true;
+      }else{
         return false;
       }
-      // 一个null 一个有值
-      if ((before == null && after) || (after == null && before)) {
-        return false;
-      }
-      if (before) {
-        tempQueen.push(before.left, before.right);
-      }
-      if (after) {
-        tempQueen.push(after.left, after.right);
-      }
+    } else {
+      return false;
     }
-    queen = tempQueen;
-    tempQueen = [];
   }
-  return true;
+  return checkVal(root.left, root.right);
 };
 // [2,3,3,4,5,5,4,null,null,8,9,9,8]
 console.log(
